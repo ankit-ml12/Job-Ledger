@@ -1,8 +1,16 @@
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { Landing, Error, Dashboard, Register } from './pages'
+
 function App() {
   return (
-    <div>
-      <h1>Job leader</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/landing" element={<Landing />} />
+        <Route path="*" element={<Error />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
