@@ -2,33 +2,39 @@ import React from 'react'
 import Wrapper from '../assets/wrappers/RegisterPage'
 import { useState } from 'react'
 import { Logo, FormRow, Alert } from '../components'
+import { useGlobalContext } from '../context/appContext'
 
 const initialState = {
   name: '',
   email: '',
   password: '',
-  isMemeber: true,
-  showAlert: false,
+  isMember: true,
 }
 
-const toggleMember = () => {
-  setValue({ ...values, isMemeber: !values.isMemeber })
-}
 const Register = () => {
+  const { isLoading, showAlert, displayAlert } = useGlobalContext()
   const [values, setValue] = useState(initialState)
   const handleChange = (e) => {
-    console.log(e.target)
+    setValue({ ...values, [e.target.name]: e.target.value })
   }
   const onSubmit = (e) => {
     e.preventDefault()
+    const { name, email, password, isMember } = values
+    if (!name || !password || (!isMember && !name)) {
+      displayAlert()
+      return
+    }
+  }
+  const toggleMember = (e) => {
+    setValue({ ...values, isMember: !values.isMember })
   }
   return (
     <Wrapper className="full-page">
-      <form className="form" onSubmit={onsubmit}>
+      <form className="form" onSubmit={onSubmit}>
         <Logo />
-        <h3>{value.isMemeber ? 'Login' : 'Register'}</h3>
-        {values.showAlert && <Alert />}
-        {!values.isMemeber && (
+        <h3>{values.isMember ? 'Login' : 'Register'}</h3>
+        {showAlert && <Alert />}
+        {!values.isMember && (
           <FormRow
             type="text"
             name="name"
@@ -50,11 +56,11 @@ const Register = () => {
         />
         <button className="btn btn-block">Submit</button>
         <p>
-          {values.isMemeber(
-            <button type="button" onClick={toggleMember} className="member-btn">
-              Register
-            </button>
-          )}
+          {values.isMember ? 'Not a member yet' : 'Allready a member?'}
+
+          <button type="button" onClick={toggleMember} className="member-btn">
+            {values.isMember ? 'Register' : 'Allready a member?'}
+          </button>
         </p>
       </form>
     </Wrapper>
