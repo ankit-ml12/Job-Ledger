@@ -3,6 +3,7 @@ dotenv.config()
 import express from 'express'
 const app = express()
 
+import 'express-async-errors'
 import notFound from './middleware/notfound.js'
 import erroHandlerMiddleware from './middleware/error-handler.js'
 import connectDB from './db/connect.js'
@@ -19,11 +20,11 @@ app.use(express.json())
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/jobs', jobRouter)
 app.use(notFound)
-// app.use(erroHandlerMiddleware)
+app.use(erroHandlerMiddleware)
 
 const start = async () => {
   try {
-    // await connectDB(database_url)
+    await connectDB(database_url)
     app.listen(PORT, () => {
       console.log(`server is listning on PORT ${PORT}`)
     })
