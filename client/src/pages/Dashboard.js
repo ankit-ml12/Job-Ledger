@@ -1,7 +1,21 @@
 import React from 'react'
+import { useEffect } from 'react'
 
 const Dashboard = () => {
-  return <div>ankit</div>
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/v1')
+      const data = await response.json()
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+  return <h1>DASHBORD </h1>
 }
 
 export default Dashboard

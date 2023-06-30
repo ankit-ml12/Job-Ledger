@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
 const app = express()
+import cors from 'cors'
 
 import 'express-async-errors'
 import notFound from './middleware/notfound.js'
@@ -14,9 +15,11 @@ const database_url = process.env.MONGO_URI
 const PORT = process.env.PORT || 3000
 
 app.use(express.json())
-// app.use('/', (req, res) => {
-//   res.json({ msg: 'abjut' })
-// })
+app.use(cors())
+console.log('temp')
+app.use('/', (req, res) => {
+  res.json({ msg: 'abjut' })
+})
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/jobs', jobRouter)
 app.use(notFound)

@@ -1,7 +1,13 @@
 import { createContext, useContext, useReducer } from 'react'
 
 import { reducer } from './reducer'
-import { DISPLAY_ALERT, CLEAR_ALERT } from './action'
+import {
+  DISPLAY_ALERT,
+  CLEAR_ALERT,
+  REGISTER_USER_BEGIN,
+  REGISTER_USER_SUCCESS,
+  REGISTER_USER_ERROR,
+} from './action'
 
 const AppContext = createContext()
 export const initialState = {
@@ -9,6 +15,9 @@ export const initialState = {
   showAlert: false,
   alertText: '',
   alertType: '',
+  user: null,
+  token: null,
+  userLocation: '',
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)

@@ -10,7 +10,9 @@ const register = async (req, res, next) => {
   }
 
   const user = await User.create(req.body)
-  res.staus(StatusCodes.OK).json({ user })
+  const token = user.createJWT()
+  user.select('-password')
+  res.status(StatusCodes.OK).json({ user, token })
 }
 const login = async (req, res) => {
   res.send('login user')
