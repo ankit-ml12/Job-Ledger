@@ -12,7 +12,8 @@ const initialState = {
 }
 
 const Register = () => {
-  const { isLoading, showAlert, displayAlert } = useGlobalContext()
+  const { isLoading, showAlert, displayAlert, registerUser } =
+    useGlobalContext()
   const [values, setValue] = useState(initialState)
   const handleChange = (e) => {
     setValue({ ...values, [e.target.name]: e.target.value })
@@ -23,6 +24,12 @@ const Register = () => {
     if (!name || !password || (!isMember && !name)) {
       displayAlert()
       return
+    }
+    const currentUser = { name, email, password }
+    if (isMember) {
+      console.log('already a member')
+    } else {
+      registerUser(currentUser)
     }
   }
   const toggleMember = (e) => {

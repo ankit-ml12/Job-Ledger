@@ -32,9 +32,12 @@ const AppProvider = ({ children }) => {
       dispatch({ type: CLEAR_ALERT })
     }, 3000)
   }
+  const registerUser = async (currentUser) => {
+    console.log(currentUser)
+  }
 
   return (
-    <AppContext.Provider value={{ ...state, displayAlert }}>
+    <AppContext.Provider value={{ ...state, displayAlert, registerUser }}>
       {children}
     </AppContext.Provider>
   )
