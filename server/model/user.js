@@ -45,7 +45,7 @@ UserSchema.pre('save', async function () {
 
 UserSchema.methods.createJWT = function () {
   return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
-    expiresIn: JWT_LIFETIME,
+    expiresIn: process.env.JWT_LIFETIME,
   })
 }
 export default mongoose.model('User', UserSchema)

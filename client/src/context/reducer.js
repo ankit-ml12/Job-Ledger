@@ -17,7 +17,34 @@ const reducer = (state, action) => {
   if (action.type == CLEAR_ALERT) {
     return { ...state, showAlert: false, alertText: '', alertType: '' }
   }
-
+  if (action.type == REGISTER_USER_BEGIN) {
+    return { ...state, isLoading: true }
+  }
+  if (action.type == REGISTER_USER_SUCCESS) {
+    const { user, token, location } = action.payload
+    return {
+      ...state,
+      isLoading: false,
+      token: token,
+      user: user,
+      userLocation: location,
+      jobLocation: location,
+      showAlert: true,
+      alertType: 'success',
+      alertText: 'User created ! Redirecting...',
+    }
+  }
+  if (action.type == REGISTER_USER_ERROR) {
+    const { user, token, location } = action.payload
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
+    }
+  }
+  console.log('ml', action.type)
   throw new Error(`no such action: ${action.type} `)
 }
 export { reducer }

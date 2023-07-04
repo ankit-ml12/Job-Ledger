@@ -9,9 +9,9 @@ const register = async (req, res, next) => {
     throw new BadRequestError(` please provide all values`)
   }
 
-  const user = await User.create(req.body)
+  let user = await User.create(req.body)
   const token = user.createJWT()
-  user.select('-password')
+  user = await User.findById(user._id).select('-password')
   res.status(StatusCodes.OK).json({ user, token })
 }
 const login = async (req, res) => {
