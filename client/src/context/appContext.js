@@ -7,6 +7,9 @@ import {
   REGISTER_USER_BEGIN,
   REGISTER_USER_SUCCESS,
   REGISTER_USER_ERROR,
+  LOGIN_USER_BEGIN,
+  LOGIN_USER_SUCCESS,
+  LOGIN_USER_ERROR,
 } from './action'
 
 const AppContext = createContext()
@@ -43,13 +46,14 @@ const AppProvider = ({ children }) => {
     localStorage.setItem('token', token)
     localStorage.setItem('location', location)
   }
-  const rempveUserFromLocalStorage = ({ user, token, location }) => {
+  const removeUserFromLocalStorage = ({ user, token, location }) => {
     localStorage.setItem('user')
     localStorage.setItem('token')
     localStorage.setItem('location')
   }
 
   const registerUser = async (currentUser) => {
+    console.log('register 2')
     dispatch({ type: REGISTER_USER_BEGIN })
     try {
       const response = await axios.post('/api/v1/auth/register', currentUser)
@@ -69,8 +73,31 @@ const AppProvider = ({ children }) => {
     clearAlert()
   }
 
+  const loginUser = async (currentUser) => {
+    console.log('login ml')
+    dispatch({ type: LOGIN_USER_BEGIN })
+    try {
+      const { data } = await axios.post('/api/v1/auth/login', currentUser)
+      // console.log(response)
+      const { user, token, location } = data
+      dispatch({
+        type: LOGIN_USER_SUCCESS,
+        payload: { user, token, location },
+      })
+      addUserToLocalStorage({ user, token, location })
+    } catch (error) {
+      dispatch({
+        type: LOGIN_USER_ERROR,
+        payload: { msg: error.response.data.err },
+      })
+    }
+    clearAlert()
+  }
+
   return (
-    <AppContext.Provider value={{ ...state, displayAlert, registerUser }}>
+    <AppContext.Provider
+      value={{ ...state, displayAlert, registerUser, loginUser }}
+    >
       {children}
     </AppContext.Provider>
   )

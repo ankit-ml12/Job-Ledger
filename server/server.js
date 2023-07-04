@@ -3,7 +3,7 @@ dotenv.config()
 import express from 'express'
 const app = express()
 import cors from 'cors'
-
+import morgan from 'morgan'
 import 'express-async-errors'
 import notFound from './middleware/notfound.js'
 import erroHandlerMiddleware from './middleware/error-handler.js'
@@ -14,9 +14,11 @@ import jobRouter from './routes/jobRouter.js'
 const database_url = process.env.MONGO_URI
 const PORT = process.env.PORT || 3000
 
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'))
+}
 app.use(express.json())
 app.use(cors())
-console.log('temp')
 // app.use('/', (req, res) => {
 //   res.json({ msg: 'abjut' })
 // })

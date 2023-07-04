@@ -14,7 +14,7 @@ const initialState = {
 
 const Register = () => {
   const navigate = useNavigate()
-  const { isLoading, showAlert, displayAlert, registerUser, user } =
+  const { isLoading, showAlert, displayAlert, registerUser, user, loginUser } =
     useGlobalContext()
   const [values, setValue] = useState(initialState)
   const handleChange = (e) => {
@@ -23,13 +23,13 @@ const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault()
     const { name, email, password, isMember } = values
-    if (!name || !password || (!isMember && !name)) {
+    if (!email || !password || (!isMember && !name)) {
       displayAlert()
       return
     }
     const currentUser = { name, email, password }
     if (isMember) {
-      console.log('already a member')
+      loginUser(currentUser)
     } else {
       registerUser(currentUser)
     }
