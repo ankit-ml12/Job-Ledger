@@ -24,6 +24,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "morgan": "^1.10.0",
+    "react-icons": "^4.10.1",
     "remove": "^0.1.5"
   }
 }
