@@ -10,9 +10,11 @@ import erroHandlerMiddleware from './middleware/error-handler.js'
 import connectDB from './db/connect.js'
 import authRouter from './routes/authRouter.js'
 import jobRouter from './routes/jobRouter.js'
+import authenticateUser from './middleware/auth.js'
 
 const database_url = process.env.MONGO_URI
 const PORT = process.env.PORT || 3000
+// const PORT = 3000
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
@@ -23,7 +25,7 @@ app.use(cors())
 //   res.json({ msg: 'abjut' })
 // })
 app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/jobs', jobRouter)
+app.use('/api/v1/jobs', authenticateUser, jobRouter)
 app.use(notFound)
 app.use(erroHandlerMiddleware)
 
