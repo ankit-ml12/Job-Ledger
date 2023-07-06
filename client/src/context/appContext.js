@@ -34,6 +34,13 @@ export const initialState = {
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  const authFetch = axios.create({
+    baseURL: '/api/v1',
+    headers: {
+      Authorization: `Bearer ${state.token}`,
+    },
+  })
+
   const displayAlert = () => {
     dispatch({ type: DISPLAY_ALERT })
     clearAlert()
@@ -77,7 +84,6 @@ const AppProvider = ({ children }) => {
   }
 
   const loginUser = async (currentUser) => {
-    console.log('login ml')
     dispatch({ type: LOGIN_USER_BEGIN })
     try {
       const { data } = await axios.post('/api/v1/auth/login', currentUser)
@@ -105,6 +111,14 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGOUT_USER })
     removeUserFromLocalStorage()
   }
+
+  const updateUser = async (currentUser) => {
+    try {
+      const { data } = await authFetch.patch('/auth/updateUser', currentUser)
+    } catch (error) {
+      console.log(error.response)
+    }
+  }
   return (
     <AppContext.Provider
       value={{
@@ -114,6 +128,7 @@ const AppProvider = ({ children }) => {
         loginUser,
         toggleSidebar,
         logoutUser,
+        updateUser,
       }}
     >
       {children}
