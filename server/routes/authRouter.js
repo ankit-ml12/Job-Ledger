@@ -6,6 +6,6 @@ import authenticateUser from '../middleware/auth.js'
 
 router.post('/register', register)
 router.post('/login', login)
-router.post('/updateUser', authenticateUser, updateUser)
+router.patch('/updateUser', authenticateUser, updateUser)
 
 export default router

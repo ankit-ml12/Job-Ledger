@@ -12,6 +12,9 @@ import {
   LOGIN_USER_ERROR,
   TOGGLE_SIDEBAR,
   LOGOUT_USER,
+  UPDATE_USER_BEGIN,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_ERROR,
 } from './action'
 
 const AppContext = createContext()
@@ -34,12 +37,12 @@ export const initialState = {
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const authFetch = axios.create({
-    baseURL: '/api/v1',
-    headers: {
-      Authorization: `Bearer ${state.token}`,
-    },
-  })
+  // const authFetch = axios.create({
+  //   baseURL: '/api/v1',
+  //   headers: {
+  //     Authorization: `Bearer ${state.token}`,
+  //   },
+  // })
 
   const displayAlert = () => {
     dispatch({ type: DISPLAY_ALERT })
@@ -111,13 +114,32 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGOUT_USER })
     removeUserFromLocalStorage()
   }
-
   const updateUser = async (currentUser) => {
+    dispatch({ type: UPDATE_USER_BEGIN })
     try {
-      const { data } = await authFetch.patch('/auth/updateUser', currentUser)
+      const { data } = await axios.patch(
+        '/api/v1/auth/updateUser',
+        currentUser,
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        }
+      )
+      const { user, location, token } = data
+      dispatch({
+        type: UPDATE_USER_SUCCESS,
+        payload: { user, location, token },
+      })
+      addUserToLocalStorage({ user, token, location })
     } catch (error) {
-      console.log(error.response)
+      addUserToLocalStorage({ user, location, token })
+      dispatch({
+        type: UPDATE_USER_ERROR,
+        payload: { msg: error.response.data.msg },
+      })
     }
+    clearAlert()
   }
   return (
     <AppContext.Provider

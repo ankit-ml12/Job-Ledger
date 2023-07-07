@@ -8,6 +8,9 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_ERROR,
   LOGOUT_USER,
+  UPDATE_USER_BEGIN,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_ERROR,
 } from './action'
 import { initialState } from './appContext'
 const reducer = (state, action) => {
@@ -68,7 +71,32 @@ const reducer = (state, action) => {
     }
   }
   if (action.type == LOGIN_USER_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
+    }
+  }
+  if (action.type == UPDATE_USER_BEGIN) {
+    return { ...state, isLoading: true }
+  }
+  if (action.type == UPDATE_USER_SUCCESS) {
     const { user, token, location } = action.payload
+    return {
+      ...state,
+      isLoading: false,
+      token: token,
+      user: user,
+      userLocation: location,
+      jobLocation: location,
+      showAlert: true,
+      alertType: 'success',
+      alertText: 'User Profile Updated...',
+    }
+  }
+  if (action.type == UPDATE_USER_ERROR) {
     return {
       ...state,
       isLoading: false,
@@ -92,6 +120,7 @@ const reducer = (state, action) => {
       userLocation: '',
     }
   }
+
   console.log('ml', action.type)
   throw new Error(`no such action: ${action.type} `)
 }

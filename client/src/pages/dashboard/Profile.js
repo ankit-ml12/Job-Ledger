@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { FormRow, Alert } from '../../components'
-import { useGlobalContext } from '../../context/appContext'
+import { useGlobalContext } from '../../context/appContext.js'
 import Wrapper from '../../assets/wrappers/DashboardFormPage'
 
 const Profile = () => {
