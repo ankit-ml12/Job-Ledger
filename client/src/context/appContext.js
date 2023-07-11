@@ -15,13 +15,18 @@ import {
   UPDATE_USER_BEGIN,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_ERROR,
+  HANDLE_CHANGE,
+  CLEAR_VALUES,
+  CREATE_JOB_BEGIN,
+  CREATE_JOB_SUCCESS,
+  CREATE_JOB_ERROR,
 } from './action'
 
 const AppContext = createContext()
 
 const token = localStorage.getItem('token')
 const user = localStorage.getItem('user')
-const location = localStorage.getItem('location')
+const userLocation = localStorage.getItem('location')
 
 export const initialState = {
   isLoading: false,
@@ -30,9 +35,17 @@ export const initialState = {
   alertType: '',
   user: user ? JSON.parse(user) : null,
   token: token,
-  userLocation: location || '',
-  jobLocation: location || '',
+  userLocation: userLocation || '',
   showSidebar: false,
+  isEditing: false,
+  editJobId: '',
+  position: '',
+  company: '',
+  jobLocation: userLocation || '',
+  jobTypeOptions: ['full-time', 'part-time', 'remote', 'internship'],
+  jobType: 'full-time',
+  statusOptions: ['pending', 'interview', 'declined'],
+  status: 'pending',
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -57,7 +70,7 @@ const AppProvider = ({ children }) => {
   const addUserToLocalStorage = ({ user, token, location }) => {
     localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('token', token)
-    localStorage.setItem('location', location)
+    localStorage.setItem(' ', location)
   }
   const removeUserFromLocalStorage = () => {
     localStorage.removeItem('user')
@@ -133,10 +146,55 @@ const AppProvider = ({ children }) => {
       })
       addUserToLocalStorage({ user, token, location })
     } catch (error) {
-      addUserToLocalStorage({ user, location, token })
+      // addUserToLocalStorage({ user, token, location })
       dispatch({
         type: UPDATE_USER_ERROR,
         payload: { msg: error.response.data.msg },
+      })
+    }
+    clearAlert()
+  }
+
+  const handleChange = ({ name, value }) => {
+    dispatch({
+      type: HANDLE_CHANGE,
+      payload: { name, value },
+    })
+  }
+  const clearValues = () => {
+    dispatch({ type: CLEAR_VALUES })
+  }
+  const createJob = async () => {
+    dispatch({ type: CREATE_JOB_BEGIN })
+    try {
+      const { position, company, jobLocation, jobType, status } = state
+
+      await axios.post(
+        '/api/v1/jobs',
+        {
+          company,
+          position,
+          jobLocation,
+          jobType,
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        }
+      )
+
+      dispatch({
+        type: CREATE_JOB_SUCCESS,
+      })
+      // call function instead clearValues()
+      dispatch({ type: CLEAR_VALUES })
+    } catch (error) {
+      if (error.response.status === 401) return
+      dispatch({
+        type: CREATE_JOB_ERROR,
+        payload: { msg: error.response.data.err },
       })
     }
     clearAlert()
@@ -151,6 +209,9 @@ const AppProvider = ({ children }) => {
         toggleSidebar,
         logoutUser,
         updateUser,
+        handleChange,
+        clearValues,
+        createJob,
       }}
     >
       {children}
