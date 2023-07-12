@@ -4,4 +4,15 @@ import Alert from '../components/Alert'
 import Navbar from '../components/Navbar'
 import BigSidebar from './BigSidebar'
 import SmallSidebar from './SmallSidebar'
-export { Logo, FormRow, Alert, Navbar, BigSidebar, SmallSidebar }
+import SearchContainer from './SearchContainer'
+import JobsContainer from './JobsContainer'
+export {
+  Logo,
+  FormRow,
+  Alert,
+  Navbar,
+  BigSidebar,
+  SmallSidebar,
+  SearchContainer,
+  JobsContainer,
+}
