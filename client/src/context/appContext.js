@@ -23,6 +23,10 @@ import {
   GET_JOBS_BEGIN,
   GET_JOBS_SUCCESS,
   SET_EDIT_JOB,
+  DELETE_JOB_BEGIN,
+  EDIT_JOB_BEGIN,
+  EDIT_JOB_SUCCESS,
+  EDIT_JOB_ERROR,
 } from './action'
 
 const AppContext = createContext()
@@ -237,11 +241,52 @@ const AppProvider = ({ children }) => {
   const setEditJob = (id) => {
     dispatch({ type: SET_EDIT_JOB, payload: { id } })
   }
-  const editJob = () => {
-    console.log('edit job')
+
+  const deleteJob = async (jobId) => {
+    dispatch({ type: DELETE_JOB_BEGIN })
+    try {
+      await axios.delete(`api/v1/jobs/${jobId}`, {
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+        },
+      })
+      getJobs()
+    } catch (error) {
+      logoutUser()
+    }
   }
-  const deleteJob = (id) => {
-    console.log(`delete : ${id}`)
+  const editJob = async () => {
+    dispatch({ type: EDIT_JOB_BEGIN })
+    try {
+      const { position, company, jobLocation, jobType, status } = state
+
+      await axios.patch(
+        `api/v1/jobs/${state.editJobId}`,
+        {
+          company,
+          position,
+          jobLocation,
+          jobType,
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        }
+      )
+      dispatch({
+        type: EDIT_JOB_SUCCESS,
+      })
+      dispatch({ type: CLEAR_VALUES })
+    } catch (error) {
+      if (error.response.status === 401) return
+      dispatch({
+        type: EDIT_JOB_ERROR,
+        payload: { msg: error.response.data.msg },
+      })
+    }
+    clearAlert()
   }
 
   return (

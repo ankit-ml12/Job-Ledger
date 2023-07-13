@@ -11,7 +11,7 @@ const createJob = async (req, res) => {
   }
 
   req.body.createdBy = req.user.userId
-
+  console.log(req.user.userId)
   const job = await Job.create(req.body)
   res.status(StatusCodes.CREATED).json({ job })
 }
@@ -26,7 +26,7 @@ const deleteJob = async (req, res) => {
 
   checkPermissions(req.user, job.createdBy)
 
-  await job.remove()
+  await job.deleteOne()
   res.status(StatusCodes.OK).json({ msg: 'Success! Job removed' })
 }
 const getAllJobs = async (req, res) => {
