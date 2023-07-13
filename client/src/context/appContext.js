@@ -27,6 +27,8 @@ import {
   EDIT_JOB_BEGIN,
   EDIT_JOB_SUCCESS,
   EDIT_JOB_ERROR,
+  SHOW_STATS_SUCCESS,
+  SHOW_STATS_BEGIN,
 } from './action'
 
 const AppContext = createContext()
@@ -57,6 +59,8 @@ export const initialState = {
   totalJobs: 0,
   numOfPages: 1,
   page: 1,
+  stats: {},
+  monthlyApplications: [],
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -288,6 +292,28 @@ const AppProvider = ({ children }) => {
     }
     clearAlert()
   }
+  const showStats = async () => {
+    dispatch({ type: SHOW_STATS_BEGIN })
+    try {
+      const { data } = await axios.get('api/v1/jobs/stats', {
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+        },
+      })
+      dispatch({
+        type: SHOW_STATS_SUCCESS,
+        payload: {
+          stats: data.defaultStats,
+          monthlyApplications: data.monthlyApplications,
+        },
+      })
+    } catch (error) {
+      console.log(error.response)
+      // logoutUser()
+    }
+
+    clearAlert()
+  }
 
   return (
     <AppContext.Provider
@@ -306,6 +332,7 @@ const AppProvider = ({ children }) => {
         setEditJob,
         deleteJob,
         editJob,
+        showStats,
       }}
     >
       {children}
