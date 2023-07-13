@@ -19,6 +19,7 @@ const AddJob = () => {
     handleChange,
     clearValues,
     createJob,
+    editJob,
   } = useGlobalContext()
 
   const handleSubmit = (e) => {
@@ -30,7 +31,7 @@ const AddJob = () => {
     //   return
     // }
     if (isEditing) {
-      // eventually editJob()
+      editJob()
       return
     }
     createJob()
