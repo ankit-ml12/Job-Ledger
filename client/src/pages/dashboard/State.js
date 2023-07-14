@@ -1,11 +1,23 @@
-import React from 'react'
+import { useEffect } from 'react'
+import { useGlobalContext } from '../../context/appContext'
+import { StatsContainer, Loading, ChartsContainer } from '../../components'
 
-const State = () => {
+const Stats = () => {
+  const { showStats, isLoading, monthlyApplications } = useGlobalContext()
+  useEffect(() => {
+    showStats()
+  }, [])
+
+  // if (isLoading) {
+  // return <Loading center />
+  // }
+
   return (
-    <div>
-      <h1>state</h1>
-    </div>
+    <>
+      <StatsContainer />
+      {monthlyApplications.length > 0 && <ChartsContainer />}
+    </>
   )
 }
 
-export default State
+export default Stats
