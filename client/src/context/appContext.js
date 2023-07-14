@@ -245,7 +245,6 @@ const AppProvider = ({ children }) => {
         },
       })
     } catch (error) {
-      console.log(error.response)
       logoutUser()
     }
     clearAlert()
@@ -320,7 +319,6 @@ const AppProvider = ({ children }) => {
         },
       })
     } catch (error) {
-      console.log(error.response)
       // logoutUser()
     }
 
