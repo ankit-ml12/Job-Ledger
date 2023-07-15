@@ -315,11 +315,10 @@ const AppProvider = ({ children }) => {
         type: SHOW_STATS_SUCCESS,
         payload: {
           stats: data.defaultStats,
-          monthlyApplications: data.monthlyApplications,
         },
       })
     } catch (error) {
-      // logoutUser()
+      logoutUser()
     }
 
     clearAlert()

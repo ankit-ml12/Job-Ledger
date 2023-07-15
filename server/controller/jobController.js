@@ -103,8 +103,9 @@ const updateJob = async (req, res) => {
 }
 
 const showState = async (req, res) => {
+  console.log('controller touch')
   let stats = await Job.aggregate([
-    { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+    { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
     { $group: { _id: '$status', count: { $sum: 1 } } },
   ])
   stats = stats.reduce((acc, curr) => {
@@ -118,7 +119,6 @@ const showState = async (req, res) => {
     interview: stats.interview || 0,
     declined: stats.declined || 0,
   }
-  let monthlyApplications = []
-  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
+  res.status(StatusCodes.OK).json({ defaultStats })
 }
 export { showState, createJob, deleteJob, getAllJobs, updateJob }
