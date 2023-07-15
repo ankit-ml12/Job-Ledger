@@ -9,7 +9,7 @@ import Job from './model/job.js'
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI)
-    await Job.deleteMany()
+    // await Job.deleteMany()
 
     const jsonProducts = JSON.parse(
       await readFile(new URL('./mock-data.json', import.meta.url))

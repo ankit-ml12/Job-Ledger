@@ -31,6 +31,7 @@ import {
   SHOW_STATS_BEGIN,
   CLEAR_FILTERS,
   CHANGE_PAGE,
+  DELETE_JOB_ERROR,
 } from './action'
 
 const AppContext = createContext()
@@ -101,7 +102,6 @@ const AppProvider = ({ children }) => {
   }
 
   const registerUser = async (currentUser) => {
-    console.log('register 2')
     dispatch({ type: REGISTER_USER_BEGIN })
     try {
       const response = await axios.post('/api/v1/auth/register', currentUser)
@@ -171,7 +171,7 @@ const AppProvider = ({ children }) => {
       // addUserToLocalStorage({ user, token, location })
       dispatch({
         type: UPDATE_USER_ERROR,
-        payload: { msg: error.response.data.msg },
+        payload: { msg: error.response.data.err },
       })
     }
     clearAlert()
@@ -267,8 +267,13 @@ const AppProvider = ({ children }) => {
       })
       getJobs()
     } catch (error) {
-      logoutUser()
+      if (error.response.status === 401) return
+      dispatch({
+        type: DELETE_JOB_ERROR,
+        payload: { msg: error.response.data.err },
+      })
     }
+    clearAlert()
   }
   const editJob = async () => {
     dispatch({ type: EDIT_JOB_BEGIN })
@@ -298,7 +303,7 @@ const AppProvider = ({ children }) => {
       if (error.response.status === 401) return
       dispatch({
         type: EDIT_JOB_ERROR,
-        payload: { msg: error.response.data.msg },
+        payload: { msg: error.response.data.err },
       })
     }
     clearAlert()

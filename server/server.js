@@ -11,6 +11,7 @@ import connectDB from './db/connect.js'
 import authRouter from './routes/authRouter.js'
 import jobRouter from './routes/jobRouter.js'
 import authenticateUser from './middleware/auth.js'
+import testUser from './middleware/testUser.js'
 
 const database_url = process.env.MONGO_URI
 const PORT = process.env.PORT || 3000

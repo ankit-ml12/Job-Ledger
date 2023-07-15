@@ -100,7 +100,6 @@ const updateJob = async (req, res) => {
 }
 
 const showState = async (req, res) => {
-  console.log('controller touch')
   let stats = await Job.aggregate([
     { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
     { $group: { _id: '$status', count: { $sum: 1 } } },
