@@ -11,7 +11,6 @@ import connectDB from './db/connect.js'
 import authRouter from './routes/authRouter.js'
 import jobRouter from './routes/jobRouter.js'
 import authenticateUser from './middleware/auth.js'
-import testUser from './middleware/testUser.js'
 
 import helmet from 'helmet'
 import xss from 'xss-clean'
@@ -26,15 +25,27 @@ if (process.env.NODE_ENV !== 'production') {
 }
 app.use(express.json())
 app.use(cors())
-app.use(express.json())
 app.use(helmet())
 app.use(xss())
 app.use(mongoSanitize())
 // app.use('/', (req, res) => {
 //   res.json({ msg: 'abjut' })
 // })
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+import path from 'path'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// only when ready to deploy
+app.use(express.static(path.resolve(__dirname, '../client/build')))
+
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/jobs', authenticateUser, jobRouter)
+
+app.get('*', function (request, response) {
+  response.sendFile(path.resolve(__dirname, '.. /client/build', 'index.html'))
+})
 app.use(notFound)
 app.use(erroHandlerMiddleware)
 
