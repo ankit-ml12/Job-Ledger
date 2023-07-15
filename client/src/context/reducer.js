@@ -31,7 +31,6 @@ import {
 } from './action'
 import { initialState } from './appContext'
 const reducer = (state, action) => {
-  console.log(action.type)
   if (action.type == DISPLAY_ALERT) {
     return {
       ...state,
@@ -254,7 +253,6 @@ const reducer = (state, action) => {
   if (action.type === CHANGE_PAGE) {
     return { ...state, page: action.payload.page }
   }
-  console.log('ml', action.type)
   throw new Error(`no such action: ${action.type} `)
 }
 export { reducer }

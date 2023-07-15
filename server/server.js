@@ -13,6 +13,10 @@ import jobRouter from './routes/jobRouter.js'
 import authenticateUser from './middleware/auth.js'
 import testUser from './middleware/testUser.js'
 
+import helmet from 'helmet'
+import xss from 'xss-clean'
+import mongoSanitize from 'express-mongo-sanitize'
+
 const database_url = process.env.MONGO_URI
 const PORT = process.env.PORT || 3000
 // const PORT = 3000
@@ -22,6 +26,10 @@ if (process.env.NODE_ENV !== 'production') {
 }
 app.use(express.json())
 app.use(cors())
+app.use(express.json())
+app.use(helmet())
+app.use(xss())
+app.use(mongoSanitize())
 // app.use('/', (req, res) => {
 //   res.json({ msg: 'abjut' })
 // })
