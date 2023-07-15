@@ -2,12 +2,16 @@ import mongoose from 'mongoose'
 
 const connectDB = async (url) => {
   await mongoose
-    .connect(url)
+    .connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    })
     .then(() => {
-      console.log('connected to database :)')
+      console.log('Connected to the database')
     })
     .catch((err) => {
-      console.log(err)
+      console.error(err)
     })
 }
 
