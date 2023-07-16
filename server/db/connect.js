@@ -5,7 +5,6 @@ const connectDB = async (url) => {
     .connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true,
     })
     .then(() => {
       console.log('Connected to the database')
