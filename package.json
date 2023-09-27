@@ -4,9 +4,7 @@
   "description": "��#\u0000 \u0000J\u0000o\u0000b\u0000-\u0000L\u0000e\u0000d\u0000g\u0000e\u0000r\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"cd ./server && npm run server\" \"cd ./client && npm run client\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "setup-production": "npm run install-client && npm run build-client && npm run install-server",
+    "start": "npm run install-client && npm run build-client && npm run install-server",
     "install-client": "cd client && npm install",
     "build-client": "cd client && npm run build",
     "install-server": "cd server && npm i",
